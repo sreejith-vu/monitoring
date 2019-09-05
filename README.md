@@ -24,6 +24,25 @@ sudo mkdir /etc/prometheus
  
  sudo -u prometheus /usr/local/bin/prometheus --config.file /etc/prometheus/prometheus.yml --storage.tsdb.path /var/lib/prometheus/ --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries
  sudo nano /etc/systemd/system/prometheus.service
+ ```
+[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/usr/local/bin/prometheus \
+    --config.file /etc/prometheus/prometheus.yml \
+    --storage.tsdb.path /var/lib/prometheus/ \
+    --web.console.templates=/etc/prometheus/consoles \
+    --web.console.libraries=/etc/prometheus/console_libraries
+
+[Install]
+WantedBy=multi-user.target
+ ```
  sudo systemctl daemon-reload
  sudo systemctl start prometheus
  sudo systemctl status prometheus
@@ -34,6 +53,21 @@ curl -LO https://github.com/prometheus/node_exporter/releases/download/v0.15.1/n
  cp node_exporter-0.15.1.linux-amd64/node_exporter /usr/local/bin
  sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
  sudo nano /etc/systemd/system/node_exporter.service
+ ```
+[Unit]
+Description=Node Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=multi-user.target
+ ```
  systemctl daemon-reload
  systemctl start node_exporter
  systemctl status node_exporter
