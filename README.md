@@ -184,7 +184,7 @@ server {
 
 
   	location /grafana/ {
-		        auth_basic "Prometheus server authentication";
+		        auth_basic "Grafana server authentication";
 		        auth_basic_user_file /etc/nginx/.htpasswd.grafana;
    			proxy_pass http://localhost:3000/;
 			proxy_set_header Host $host;
