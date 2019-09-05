@@ -35,6 +35,16 @@ chown -R prometheus:prometheus /etc/prometheus/consoles
 chown -R prometheus:prometheus /etc/prometheus/console_libraries
  
 sudo nano /etc/prometheus/prometheus.yml
+ ```
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:9090']
+```
 
 sudo chown prometheus:prometheus /etc/prometheus/prometheus.yml
  
@@ -142,7 +152,11 @@ sudo apt-get install -y apt-transport-https
 sudo service grafana-server start
 
 curl -L localhost:3000
- 
+
+sudo htpasswd -c /etc/nginx/.htpasswd.grafana grafadmin
+
+sudo htpasswd -c /etc/nginx/.htpasswd.prometheus promadmin 
+
 vi /etc/nginx/sites-available/prometheus
 ```
 # Default server configuration
